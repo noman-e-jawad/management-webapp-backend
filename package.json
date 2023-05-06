@@ -1,0 +1,35 @@
+{
+  "name": "janitorial-leads-pro-api",
+  "version": "1.0.0",
+  "main": "dist/server.js",
+  "author": "Shuvro Sarkar",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "lint": "eslint . --ext .js",
+    "prettier-format": "prettier --config .prettierrc src/**/*.ts --write",
+    "build": "babel src --out-dir dist",
+    "start": "node dist/server.js",
+    "dev": "npm run build &&  nodemon dist/server.js"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.20.5",
+    "@babel/preset-env": "^7.20.2",
+    "eslint": "^8.23.1",
+    "nodemon": "^2.0.19"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "^0.0.3",
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.6.1",
+    "nodemailer": "^6.8.0",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.0",
+    "validator": "^13.7.0"
+  }
+}
