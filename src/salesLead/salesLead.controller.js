@@ -476,10 +476,10 @@ export const getSortSalesLeads = async (req, res) => {
 };
 
 // get datas inside sales data
-export const getAgentName = async (req, res) => {
+export const getFiltersFromSalesleads = async (req, res) => {
   try {
-    const agentName = await SalesLead.distinct('agentName');
-    if (!agentName) {
+    const filter = await SalesLead.distinct(req.query.salesFilter);
+    if (!filter) {
       return res.json({
         status: 404,
         success: false,
@@ -490,7 +490,7 @@ export const getAgentName = async (req, res) => {
       status: 200,
       success: true,
       message: 'All Agent Fetched Successfully',
-      data: agentName,
+      data: filter,
     });
   } catch (error) {
     return res.json({
