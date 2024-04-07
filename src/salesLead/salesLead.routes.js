@@ -10,6 +10,7 @@ import {
   getSalesLeadsByCampaign,
   getSalesLeadsByDaterange,
   getSalesLeadsByEmail,
+  getSalesleadsFromDates,
   getSortSalesLeads,
   getVerifiedSalesLeads,
   importSalesLead,
@@ -31,6 +32,7 @@ router.get('/get-by-campaign', getSalesLeadsByCampaign); // get sales lead by ca
 router.get('/get-by-agent', getSalesLeadsByAgent); // get sales lead by agent
 router.get('/get-by-daterange', getSalesLeadsByDaterange); // get sales lead by agent
 router.get('/sorted', getSortSalesLeads); // get sorted leads
+router.get('/get-by-dates', getSalesleadsFromDates); //get sorted leads by date and date range
 router.get('/filters-from-saleslead', getFiltersFromSalesleads); // get any columns from leads table
 router.put('/update', updateSalesLead); // update sales lead
 router.put('/verify', verifySalesLead); // verify a specific sales lead

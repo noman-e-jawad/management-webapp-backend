@@ -500,3 +500,44 @@ export const getFiltersFromSalesleads = async (req, res) => {
     });
   }
 };
+
+//get sales leads by date and date range
+export const getSalesleadsFromDates = async (req, res) => {
+  try {
+    const startDate = req.query.startDate;
+    const endDate = req.query.endDate;
+
+    let filter = {};
+
+    if (startDate && endDate) {
+      filter.appointmentDate = { $gte: startDate, $lte: endDate };
+    } else if (startDate) {
+      filter.appointmentDate = startDate;
+    } else if (endDate) {
+      filter.appointmentDate = endDate;
+    }
+
+    const results = await SalesLead.find(filter);
+
+    if (!results || results.length === 0) {
+      return res.json({
+        status: 404,
+        success: false,
+        message: 'No Agent Available',
+      });
+    }
+
+    return res.json({
+      status: 200,
+      success: true,
+      message: 'Sales Leads Fetched Successfully',
+      data: results,
+    });
+  } catch (error) {
+    return res.json({
+      status: 500,
+      success: false,
+      message: error.message,
+    });
+  }
+};
