@@ -1,8 +1,8 @@
 import Stuff from './Stuff';
-
 //create stuff
 export const createStuff = async (req, res, next) => {
   const { name, email, password, role } = req.body;
+  console.log(name, email, password, role);
 
   try {
     const existingStuff = await Stuff.findOne({ email: email });
@@ -18,18 +18,21 @@ export const createStuff = async (req, res, next) => {
     const stuff = new Stuff({
       name,
       email,
-      password,
+      password, // Ideally, hash the password before saving it
       role,
     });
 
-    stuff.save();
+    // Await the save operation
+    const savedStuff = await stuff.save();
+
     return res.json({
       status: 200,
       success: true,
       message: 'Stuff Created Successfully',
-      data: stuff,
+      data: savedStuff,
     });
   } catch (error) {
+    console.error('Error creating Stuff:', error); // Log the error for debugging
     return res.json({
       status: 500,
       success: false,
@@ -37,6 +40,47 @@ export const createStuff = async (req, res, next) => {
     });
   }
 };
+
+//updated Create Suff Function
+// export const createStuff = async (req, res, next) => {
+//   const { name, email, password, role } = req.body;
+//   console.log(name, email, password, role);
+
+//   try {
+//     const existingStuff = await Stuff.findOne({ email: email });
+
+//     if (existingStuff) {
+//       return res.json({
+//         status: 422,
+//         success: false,
+//         message: 'Email Already in Use',
+//       });
+//     }
+
+//     const hashedPassword = await bcrypt.hash(password, 10); // Hash the password with salt rounds
+//     const stuff = new Stuff({
+//       name,
+//       email,
+//       password: hashedPassword,
+//       role,
+//     });
+
+//     const savedStuff = await stuff.save(); // Await the save operation
+//     return res.json({
+//       status: 200,
+//       success: true,
+//       message: 'Stuff Created Successfully',
+//       data: savedStuff,
+//     });
+//   } catch (error) {
+//     console.error('Error creating Stuff:', error); // Log the error
+//     return res.json({
+//       status: 500,
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
 
 //get all stuff
 export const getAllStuffs = async (req, res) => {

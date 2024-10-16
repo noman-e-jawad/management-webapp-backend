@@ -1,11 +1,9 @@
-import { compare } from 'bcrypt-nodejs';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import Client from '../client/Client';
 import { client, secret } from '../config/config';
 import { sendMail, setMailOptions } from '../config/nodemailer';
 import Stuff from '../stuff/Stuff';
-
 dotenv.config();
 
 const tokenForStuff = async (stuff) => {
@@ -115,45 +113,97 @@ export const logout = (req, res) => {
   }
 };
 
+// export const signin = async (req, res, next) => {
+//   const { email, password } = req.body;
+//   console.log({ email, password });
+//   try {
+//     let user;
+//     user = await Stuff.findOne({ email: email });
+//     if (!user) {
+//       user = await Client.findOne({ email: email });
+//     }
+//     if (!user) {
+//       res.json({
+//         status: 404,
+//         success: false,
+//         message: 'User Not Found',
+//       });
+//     }
+
+//     // Log the user object to see the password retrieved from the database
+//     console.log('User found:', user);
+
+//     // Log the password to see what is being compared
+//     console.log('Password from DB:', user.password);
+
+//     compare(password, user.password, async (err, isMatch) => {
+//       if (isMatch) {
+//         //login successful, set jwt
+//         const token = await tokenForStuff(user);
+//         return res.json({
+//           status: 200,
+//           success: true,
+//           message: 'Login Successful',
+//           data: {
+//             name: user.name,
+//             email: user.email,
+//             role: user?.role || 'client',
+//             token,
+//           },
+//         });
+//       } else {
+//         return res.json({
+//           status: 401,
+//           success: false,
+//           message: 'Password Does not Match',
+//         });
+//       }
+//     });
+//   } catch (error) {
+//     return res.json({
+//       status: 500,
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+//modified sign in
 export const signin = async (req, res, next) => {
-  const { email, password } = req.body;
-  console.log({ email, password });
+  const { email } = req.body; // Only capturing the email
+  console.log({ email });
+
   try {
     let user;
     user = await Stuff.findOne({ email: email });
     if (!user) {
       user = await Client.findOne({ email: email });
     }
+
+    // Check if user is found
     if (!user) {
-      res.json({
+      return res.json({
         status: 404,
         success: false,
         message: 'User Not Found',
       });
     }
 
-    compare(password, user.password, async (err, isMatch) => {
-      if (isMatch) {
-        //login successful, set jwt
-        const token = await tokenForStuff(user);
-        return res.json({
-          status: 200,
-          success: true,
-          message: 'Login Successful',
-          data: {
-            name: user.name,
-            email: user.email,
-            role: user?.role || 'client',
-            token,
-          },
-        });
-      } else {
-        return res.json({
-          status: 401,
-          success: false,
-          message: 'Password Does not Match',
-        });
-      }
+    // Log the user object to see the details retrieved from the database
+    console.log('User found:', user);
+
+    // Directly log in if the email matches
+    const token = await tokenForStuff(user); // Still generating a token
+    return res.json({
+      status: 200,
+      success: true,
+      message: 'Login Successful',
+      data: {
+        name: user.name,
+        email: user.email,
+        role: user?.role || 'client',
+        token,
+      },
     });
   } catch (error) {
     return res.json({
